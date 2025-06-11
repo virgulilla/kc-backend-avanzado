@@ -7,16 +7,16 @@
       
       <div class="md:w-1/2 mb-8 md:mb-0 text-center md:text-left">
         <h2 class="text-4xl font-bold text-[#015556] mb-6 leading-tight">
-          <span class="block">Compra y vende artículos</span> de segunda mano.
+          <span class="block"><%= __('Buy and sell second-hand items.') %></span>
         </h2>
   
         <% if (!session.userId) { %>
           <a href="/login" class="inline-flex items-center gap-2 bg-[#015556] hover:bg-opacity-90 text-white font-semibold py-3 px-6 rounded-lg transition">
-            <i class="fa fa-plus"></i> Vender ahora
+            <i class="fa fa-plus"></i> <%= __('Sell now') %>
           </a>
         <% } else { %>
           <a href="/products" class="inline-flex items-center gap-2 bg-[#015556] hover:bg-opacity-90 text-white font-semibold py-3 px-6 rounded-lg transition">
-            <i class="fa fa-plus"></i> Vender ahora
+            <i class="fa fa-plus"></i> <%= __('Sell now') %>
           </a>
         <% } %>
       </div>
@@ -33,34 +33,34 @@
     <div class="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition">
       <i class="fas fa-upload fa-3x text-[#015556] mb-4"></i>
       <h3 class="text-xl font-semibold text-gray-800 mb-2"><%= __('Publish in seconds') %></h3>
-      <p class="text-gray-600">Sube tus productos de forma sencilla y empieza a vender desde ya. Solo necesitas una foto y un precio.</p>
+      <p class="text-gray-600"><%= __('Upload your products easily and start selling right away. All you need is a photo and a price.') %></p>
     </div>
 
     <div class="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition">
       <i class="fa-brands fa-rocketchat fa-3x text-[#015556] mb-4"></i>
-      <h3 class="text-xl font-semibold text-gray-800 mb-2">Chatea con compradores</h3>
-      <p class="text-gray-600">Contacta fácilmente con los interesados y cierra tus ventas de manera rápida y segura.</p>
+      <h3 class="text-xl font-semibold text-gray-800 mb-2"><%= __('Chat with buyers.') %></h3>
+      <p class="text-gray-600"><%= __('Easily contact interested buyers and close your sales quickly and safely.') %></p>
     </div>
 
     <div class="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition">
       <i class="fa-solid fa-magnifying-glass fa-3x text-[#015556] mb-4"></i>
-      <h3 class="text-xl font-semibold text-gray-800 mb-2">Encuentra lo que buscas</h3>
-      <p class="text-gray-600">Explora miles de productos de segunda mano: móviles, coches, moda, y mucho más a precios imbatibles.</p>
+      <h3 class="text-xl font-semibold text-gray-800 mb-2"><%= __("Find what you're looking for.") %></h3>
+      <p class="text-gray-600"><%= __("Explore thousands of second-hand products: phones, cars, fashion, and much more at unbeatable prices.") %></p>
     </div>
 
   </section>
 
   <section class="bg-[#E9FFB4] text-[#015556] rounded-lg shadow-md p-8 text-center">
-    <h2 class="text-2xl font-bold mb-4">¿Listo para vender?</h2>
-    <p class="mb-6 text-lg">Crea tu cuenta y empieza a ganar dinero con las cosas que ya no usas.</p>
+    <h2 class="text-2xl font-bold mb-4"><%= __('Ready to sell?') %></h2>
+    <p class="mb-6 text-lg"><%= __("Create your account and start making money with the things you no longer use.") %></p>
 
     <% if (!session.userId) { %>
       <a href="/login" class="inline-block bg-[#015556] text-white font-semibold py-3 px-6 rounded-lg">
-        Crear cuenta
+        <%= __("Create account") %>
       </a>
     <% } else { %>
       <a href="/products/add" class="inline-block bg-white text-[#015556] font-semibold py-3 px-6 rounded-lg hover:bg-gray-100 transition">
-        Publicar producto
+        <%= __("Post product") %>
       </a>
     <% } %>
   </section>
@@ -68,7 +68,7 @@
   <!-- Chat Section -->
   <% if (session.userId) { %>
     <section class="mt-12 p-6 bg-white rounded-lg shadow-md">
-      <h3 class="text-2xl font-semibold text-center mb-4">Chat Global</h3>
+      <h3 class="text-2xl font-semibold text-center mb-4"><%= __("Global Chat") %></h3>
 
       <div id="messages" class="border p-4 max-h-60 overflow-auto flex flex-col gap-2 bg-gray-50 rounded">
         <% let lastDate = null; %>
@@ -100,7 +100,7 @@
 
       <div class="flex gap-2 mt-4">
         <input type="text" id="messageInput" class="flex-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Escribe un mensaje..." />
-        <button id="sendButton" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Enviar</button>
+        <button id="sendButton" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"><%= __("Send") %></button>
       </div>
     </section>
   <% } %>

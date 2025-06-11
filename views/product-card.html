@@ -18,7 +18,7 @@
       <h2 class="text-2xl font-bold text-[#015556]"><%= product.name %></h2>
 
       <p class="text-indigo-600 text-xl font-semibold">
-        Precio: <span><%= product.price %> €</span>
+        <%= __("Price")%>: <span><%= product.price %> €</span>
       </p>
 
       <div class="flex flex-wrap gap-2">
@@ -34,7 +34,7 @@
           href="/products"
           class="flex-1 text-center bg-gray-200 hover:bg-gray-300 text-[#015556] font-semibold py-3 rounded-lg transition"
         >
-          Volver al listado
+          <%= __("Back to listing") %>
         </a>
 
         <form
@@ -47,7 +47,7 @@
             type="submit"
             class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-lg transition"
           >
-            Eliminar Producto
+            <%= __("Delete product") %>
           </button>
         </form>
       </div>

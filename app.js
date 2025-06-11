@@ -13,6 +13,7 @@ import { addFlashMessages } from "./lib/flashmessages.js";
 import i18n from "./lib/i18nConfigure.js";
 import * as apiProductsController from "./controllers/api/apiProductsController.js";
 import upload from "./lib/uploadConfigure.js";
+import * as localeController from './controllers/localeController.js'
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.get('/api/products/:productId', apiProductsController.getOne);
 app.post('/api/products',  upload.single("image"), apiProductsController.newProduct)
 
 app.use(i18n.init);
+app.get('/change-locale/:locale', localeController.changeLocale)
 
 app.use(flash());
 app.use(addFlashMessages);

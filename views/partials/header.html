@@ -1,33 +1,102 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><%= appName %></title>
-  
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
-<body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= appName %></title>
 
-  <header class="bg-white shadow">
-    <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-      
-      <h1 class="text-2xl font-bold text-[#015556]">
-        <a href="/"><%= appName %></a>
-      </h1>
-  
-      <button id="menu-toggle" class="md:hidden text-gray-600 focus:outline-none">
-        <i class="fas fa-bars fa-lg"></i>
-      </button>
-  
-      <div class="hidden md:flex md:items-center md:gap-6 flex-1 justify-between ml-8">
-  
-        <form method="get" action="/products" name="searchbox" class="relative flex items-center w-full max-w-md">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
+    <header class="bg-white shadow">
+      <div
+        class="container mx-auto px-4 py-4 flex items-center justify-between"
+      >
+        <h1 class="text-2xl font-bold text-[#015556]">
+          <a href="/"><%= appName %></a>
+        </h1>
+
+        <button
+          id="menu-toggle"
+          class="md:hidden text-gray-600 focus:outline-none"
+        >
+          <i class="fas fa-bars fa-lg"></i>
+        </button>
+
+        <div
+          class="hidden md:flex md:items-center md:gap-6 flex-1 justify-between ml-8"
+        >
+          <form
+            method="get"
+            action="/products"
+            name="searchbox"
+            class="relative flex items-center w-full max-w-md"
+          >
+            <input
+              id="searchbox-form-input"
+              type="search"
+              name="name"
+              placeholder="<%= __('Search products...') %>"
+              autocomplete="off"
+              class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#015556] focus:outline-none"
+            />
+            <img
+              src="https://web-static.wallapop.com/nextjs/_next/static/media/search-icon.6745f472.svg"
+              width="20"
+              height="20"
+              alt="Search Icon Magnifier"
+              class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            />
+          </form>
+
+          <div class="flex items-center gap-4">
+            <% if (!session.userId) { %>
+            <a
+              href="/login"
+              class="text-gray-600 hover:text-[#015556] transition"
+              >Regístrate o inicia sesión</a
+            >
+            <a
+              href="/products"
+              class="flex items-center gap-2 bg-[#015556] hover:bg-[#014046] text-white py-2 px-4 rounded-lg transition"
+            >
+              <i class="fas fa-plus"></i> <%= __('My products') %>
+            </a>
+            <% } else { %> <%= __('Hello, {{userName}}', session) %>
+            <a
+              href="/logout"
+              class="text-gray-600 hover:text-red-600 transition"
+              >Logout</a
+            >
+            <a
+              href="/products"
+              class="flex items-center gap-2 bg-[#015556] hover:bg-[#014046] text-white py-2 px-4 rounded-lg transition"
+            >
+              <i class="fas fa-plus"></i> <%= __('My products') %>
+            </a>
+            <% } %> <%# Lang selector %>
+            <div class="flex items-center gap-2 ml-4">
+              <% getLocales().forEach( locale => { %>
+              <a href="/change-locale/<%= locale %>" class="block w-6 h-6 ring-1 ring-gray-300 rounded overflow-hidden hover:opacity-75 transition">
+                <img src="/images/<%= locale %>.png" alt="<%= locale %>"  class="w-full h-full object-cover"/>
+              </a>
+              <% }) %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="mobile-menu" class="md:hidden hidden px-4 pb-4">
+        <form name="searchbox" class="relative flex items-center w-full mb-4">
           <input
-            id="searchbox-form-input"
+            id="searchbox-form-input-mobile"
             type="search"
-            name="name"
             placeholder="Buscar productos..."
             autocomplete="off"
             class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#015556] focus:outline-none"
@@ -40,91 +109,65 @@
             class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
           />
         </form>
-  
-        <div class="flex items-center gap-4">
+
+        <div class="flex flex-col gap-4">
           <% if (!session.userId) { %>
-            <a href="/login" class="text-gray-600 hover:text-[#015556] transition">Regístrate o inicia sesión</a>
-            <a href="/products" class="flex items-center gap-2 bg-[#015556] hover:bg-[#014046] text-white py-2 px-4 rounded-lg transition">
-              <i class="fas fa-plus"></i> Mis productos
-            </a>
+          <a
+            href="/login"
+            class="block text-gray-600 hover:text-[#015556] transition"
+            >Regístrate o inicia sesión</a
+          >
+          <a
+            href="/products"
+            class="flex items-center justify-center gap-2 bg-[#015556] hover:bg-[#014046] text-white py-2 px-4 rounded-lg transition"
+          >
+            <i class="fas fa-plus"></i> <%= __('My products') %>
+          </a>
           <% } else { %>
-            <%= __n('Mouse', 0) %>
-            <%= __n('Mouse', 1) %>
-            <%= __n('Mouse', 2) %>
-            <%= __('Hello, {{userName}}', session) %>  <a href="/logout" class="text-gray-600 hover:text-red-600 transition">Logout</a>
-            <a href="/products" class="flex items-center gap-2 bg-[#015556] hover:bg-[#014046] text-white py-2 px-4 rounded-lg transition">
-              <i class="fas fa-plus"></i> Mis productos
-            </a>
+          <a
+            href="/logout"
+            class="block text-gray-600 hover:text-red-600 transition"
+            >Logout</a
+          >
+          <a
+            href="/products"
+            class="flex items-center justify-center gap-2 bg-[#015556] hover:bg-[#014046] text-white py-2 px-4 rounded-lg transition"
+          >
+            <i class="fas fa-plus"></i> <%= __('My products') %>
+          </a>
           <% } %>
         </div>
-  
       </div>
-    </div>
-  
-    <div id="mobile-menu" class="md:hidden hidden px-4 pb-4">
-      
-      <form name="searchbox" class="relative flex items-center w-full mb-4">
-        <input
-          id="searchbox-form-input-mobile"
-          type="search"
-          placeholder="Buscar productos..."
-          autocomplete="off"
-          class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#015556] focus:outline-none"
-        />
-        <img
-          src="https://web-static.wallapop.com/nextjs/_next/static/media/search-icon.6745f472.svg"
-          width="20"
-          height="20"
-          alt="Search Icon Magnifier"
-          class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-        />
-      </form>
-  
-      <div class="flex flex-col gap-4">
-        <% if (!session.userId) { %>
-          <a href="/login" class="block text-gray-600 hover:text-[#015556] transition">Regístrate o inicia sesión</a>
-          <a href="/products" class="flex items-center justify-center gap-2 bg-[#015556] hover:bg-[#014046] text-white py-2 px-4 rounded-lg transition">
-            <i class="fas fa-plus"></i> Mis productos
-          </a>
-        <% } else { %>
-          <a href="/logout" class="block text-gray-600 hover:text-red-600 transition">Logout</a>
-          <a href="/products" class="flex items-center justify-center gap-2 bg-[#015556] hover:bg-[#014046] text-white py-2 px-4 rounded-lg transition">
-            <i class="fas fa-plus"></i> Mis productos
-          </a>
-        <% } %>
-      </div>
-  
-    </div>
-  </header>
+    </header>
 
-  <script>
-    const toggleButton = document.getElementById('menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
-  
-    toggleButton.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-    });
-  </script>
-  
+    <script>
+      const toggleButton = document.getElementById("menu-toggle");
+      const mobileMenu = document.getElementById("mobile-menu");
 
-  <main class="container mx-auto px-4 py-8 flex-1">
+      toggleButton.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+      });
+    </script>
 
-    <% if (flashMessages.error && flashMessages.error.length > 0) { %>
+    <main class="container mx-auto px-4 py-8 flex-1">
+      <% if (flashMessages.error && flashMessages.error.length > 0) { %>
       <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
         <ul class="list-disc list-inside space-y-1">
           <% flashMessages.error.forEach(function(message) { %>
-            <li><%= message %></li>
+          <li><%= message %></li>
           <% }); %>
         </ul>
       </div>
-    <% } %>
-
-    <% if (flashMessages.success && flashMessages.success.length > 0) { %>
+      <% } %> <% if (flashMessages.success && flashMessages.success.length > 0)
+      { %>
       <div class="mb-4 p-4 bg-green-100 text-green-700 rounded-lg">
         <ul class="list-disc list-inside space-y-1">
           <% flashMessages.success.forEach(function(message) { %>
-            <li><%= message %></li>
+          <li><%= message %></li>
           <% }); %>
         </ul>
       </div>
-    <% } %>
+      <% } %>
+    </main>
+  </body>
+</html>

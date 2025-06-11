@@ -1,0 +1,61 @@
+<%- include('partials/header.html') %>
+
+<main class="flex items-center justify-center flex-1 bg-gray-100 px-4 py-12">
+
+  <article class="bg-white w-full max-w-lg rounded-lg shadow-lg overflow-hidden">
+
+    <div class="w-full h-64 bg-gray-200">
+      <img
+        src="<%= product.image %>"
+        onerror="this.onerror=null;this.src='https://img.freepik.com/free-vector/images-concept-illustration_114360-218.jpg?t=st=1742221622~exp=1742225222~hmac=417eebf58d19fc9c829cfbacff7edde291755546892eadcaf4430c4c3fe50ce3&w=740';"
+        alt="<%= product.name %>"
+        class="w-full h-full object-cover"
+      />
+    </div>
+
+    <div class="p-6 flex flex-col gap-4">
+
+      <h2 class="text-2xl font-bold text-[#015556]"><%= product.name %></h2>
+
+      <p class="text-indigo-600 text-xl font-semibold">
+        Precio: <span><%= product.price %> €</span>
+      </p>
+
+      <div class="flex flex-wrap gap-2">
+        <% product.tags.forEach(function(tag) { %>
+          <span class="px-3 py-1 bg-gray-200 text-sm text-gray-700 rounded-full">
+            <%= tag %>
+          </span>
+        <% }); %>
+      </div>
+
+      <div class="flex gap-4 mt-6">
+        <a
+          href="/products"
+          class="flex-1 text-center bg-gray-200 hover:bg-gray-300 text-[#015556] font-semibold py-3 rounded-lg transition"
+        >
+          Volver al listado
+        </a>
+
+        <form
+          action="/products/<%= product._id %>/delete"
+          method="POST"
+          onsubmit="return confirm('¿Estás seguro de eliminar este producto?');"
+          class="flex-1"
+        >
+          <button
+            type="submit"
+            class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-lg transition"
+          >
+            Eliminar Producto
+          </button>
+        </form>
+      </div>
+
+    </div>
+
+  </article>
+
+</main>
+
+<%- include('partials/footer.html') %>

@@ -1,0 +1,196 @@
+<%- include('partials/header.html') %>
+
+<main class="flex flex-col md:flex-row container mx-auto px-4 py-8 gap-8">
+
+  <aside class="w-full md:w-1/4 bg-white rounded-lg shadow-md p-6 space-y-6">
+
+    <h3 class="text-xl font-bold text-[#015556] mb-4">Filtrar Productos</h3>
+
+    <form method="GET" action="/products" class="space-y-6">
+
+      <div>
+        <label for="name" class="block text-gray-700 mb-2">Nombre:</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value="<%= typeof req.query.name !== 'undefined' ? req.query.name : '' %>"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#015556] focus:outline-none"
+        />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 mb-2">Precio:</label>
+        <div id="slider" class="mb-4"></div>
+        <input type="hidden" name="min" id="price-min">
+        <input type="hidden" name="max" id="price-max">
+      </div>
+
+      <div>
+        <label for="tag" class="block text-gray-700 mb-2">Categorías:</label>
+        <select
+          name="tag"
+          id="tag"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#015556] focus:outline-none"
+        >
+          <option value="">-- Todas --</option>
+          <option value="work" <%= req.query.tag === 'work' ? 'selected' : '' %>>Work</option>
+          <option value="lifestyle" <%= req.query.tag === 'lifestyle' ? 'selected' : '' %>>Lifestyle</option>
+          <option value="motor" <%= req.query.tag === 'motor' ? 'selected' : '' %>>Motor</option>
+          <option value="mobile" <%= req.query.tag === 'mobile' ? 'selected' : '' %>>Mobile</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="sort" class="block text-gray-700 mb-2">Ordenar por:</label>
+        <select
+          name="sort"
+          id="sort"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#015556] focus:outline-none"
+        >
+          <option value="name" <%= req.query.sort === 'name' ? 'selected' : '' %>>Nombre (A-Z)</option>
+          <option value="-price" <%= req.query.sort === '-price' ? 'selected' : '' %>>Precio (Mayor a menor)</option>
+          <option value="price" <%= req.query.sort === 'price' ? 'selected' : '' %>>Precio (Menor a mayor)</option>
+        </select>
+      </div>
+
+      <div class="flex flex-col gap-3">
+        <button
+          type="submit"
+          class="w-full bg-[#015556] hover:bg-[#014046] text-white font-semibold py-3 rounded-lg transition"
+        >
+          Aplicar Filtros
+        </button>
+        <a
+          href="/products"
+          class="w-full text-center bg-gray-200 hover:bg-gray-300 text-[#015556] font-semibold py-3 rounded-lg transition"
+        >
+          Limpiar
+        </a>
+      </div>
+
+    </form>
+
+  </aside>
+
+  <section class="flex-1 space-y-6">
+
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <h2 class="text-2xl font-bold text-[#015556]">Mis Productos (<%= totalProducts %>)</h2>
+      <a
+        href="/products/add"
+        class="inline-flex items-center gap-2 bg-[#015556] hover:bg-[#014046] text-white font-semibold py-3 px-6 rounded-lg transition"
+      >
+        + Nuevo Producto
+      </a>
+    </div>
+
+    <% if (products.length === 0) { %>
+      <p class="text-gray-500">No se han encontrado productos.</p>
+    <% } else { %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <% products.forEach(product => { %>
+          <article class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col transition hover:shadow-lg">
+            
+            <img
+              src="<%= product.image %>"
+              onerror="this.onerror=null;this.src='https://img.freepik.com/free-vector/images-concept-illustration_114360-218.jpg?t=st=1742221622~exp=1742225222~hmac=417eebf58d19fc9c829cfbacff7edde291755546892eadcaf4430c4c3fe50ce3&w=740';"
+              alt="<%= product.name %>"
+              class="w-full h-48 object-cover"
+            />
+
+            <div class="flex-1 flex flex-col p-4 space-y-3">
+              <h3 class="text-lg font-semibold text-[#015556]">
+                <a href="/products/<%= product._id %>" class="hover:underline"><%= product.name %></a>
+              </h3>
+
+              <p class="text-indigo-600 font-bold text-xl"><%= product.price %> €</p>
+
+              <div class="flex flex-wrap gap-2 text-sm text-gray-600">
+                <% product.tags.forEach(tag => { %>
+                  <span class="px-2 py-1 bg-gray-200 rounded"><%= tag %></span>
+                <% }); %>
+              </div>
+
+              <div class="mt-auto">
+                <form
+                  action="/products/<%= product._id %>/delete"
+                  method="POST"
+                  onsubmit="return confirm('¿Estás seguro de eliminar este producto?');"
+                >
+                  <button
+                    type="submit"
+                    class="flex items-center justify-center w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg transition"
+                  >
+                    <i class="fas fa-trash mr-2"></i> Eliminar
+                  </button>
+                </form>
+              </div>
+            </div>
+
+          </article>
+        <% }); %>
+
+      </div>
+    <% } %>
+
+    <% if (totalPages > 1) { %>
+      <nav class="flex justify-center items-center gap-4 mt-8">
+        
+        <% if (currentPage > 1) { %>
+          <a
+            href="?page=<%= currentPage - 1 %>&limit=<%= limit %>"
+            class="bg-[#015556] hover:bg-[#014046] text-white font-semibold py-2 px-4 rounded-lg transition"
+          >
+            Anterior
+          </a>
+        <% } %>
+
+        <span class="text-gray-600">Página <%= currentPage %> de <%= totalPages %></span>
+
+        <% if (currentPage < totalPages) { %>
+          <a
+            href="?page=<%= currentPage + 1 %>&limit=<%= limit %>"
+            class="bg-[#015556] hover:bg-[#014046] text-white font-semibold py-2 px-4 rounded-lg transition"
+          >
+            Siguiente
+          </a>
+        <% } %>
+
+      </nav>
+    <% } %>
+
+  </section>
+
+</main>
+
+<%- include('partials/footer.html') %>
+
+<link href="/lib/nouislider/nouislider.min.css" rel="stylesheet">
+<script src="/lib/nouislider/nouislider.min.js"></script>
+
+<script>
+  const slider = document.getElementById('slider');
+  const inputMin = document.getElementById('price-min');
+  const inputMax = document.getElementById('price-max');
+
+  const min = <%= typeof req.query.min !== 'undefined' ? req.query.min : 0 %>;
+  const max = <%= typeof req.query.max !== 'undefined' ? req.query.max : 5000 %>;
+
+  noUiSlider.create(slider, {
+    start: [min, max],
+    connect: true,
+    tooltips: true,
+    range: { 'min': 0, 'max': 5000 }
+  });
+
+  slider.noUiSlider.on('update', function(values, handle) {
+    const value = values[handle];
+    if (handle === 1) {
+      inputMax.value = value;
+    } else {
+      inputMin.value = value;
+    }
+  });
+</script>

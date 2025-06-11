@@ -1,0 +1,3 @@
+MONGODB_URI="mongo uri connection_string"
+PORT="port_nubmer"
+SESSION_SECRET="secret_string"

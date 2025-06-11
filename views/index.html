@@ -1,0 +1,150 @@
+<%- include('partials/header.html') %>
+
+<main class="container mx-auto px-4 py-8 flex-1">
+
+  <section class="w-full bg-[#E9FFB4]">
+    <div class="container mx-auto flex flex-col md:flex-row items-center px-4 py-12">
+      
+      <div class="md:w-1/2 mb-8 md:mb-0 text-center md:text-left">
+        <h2 class="text-4xl font-bold text-[#015556] mb-6 leading-tight">
+          <span class="block">Compra y vende artículos</span> de segunda mano.
+        </h2>
+  
+        <% if (!session.userId) { %>
+          <a href="/login" class="inline-flex items-center gap-2 bg-[#015556] hover:bg-opacity-90 text-white font-semibold py-3 px-6 rounded-lg transition">
+            <i class="fa fa-plus"></i> Vender ahora
+          </a>
+        <% } else { %>
+          <a href="/products" class="inline-flex items-center gap-2 bg-[#015556] hover:bg-opacity-90 text-white font-semibold py-3 px-6 rounded-lg transition">
+            <i class="fa fa-plus"></i> Vender ahora
+          </a>
+        <% } %>
+      </div>
+  
+      <div class="md:w-1/2">
+        <img src="/images/hero-slide-1.avif" alt="Chica mirando móvil" class="w-full h-auto object-cover rounded-lg shadow-lg">
+      </div>
+  
+    </div>
+  </section>
+
+  <section class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+    
+    <div class="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition">
+      <i class="fas fa-upload fa-3x text-[#015556] mb-4"></i>
+      <h3 class="text-xl font-semibold text-gray-800 mb-2"><%= __('Publish in seconds') %></h3>
+      <p class="text-gray-600">Sube tus productos de forma sencilla y empieza a vender desde ya. Solo necesitas una foto y un precio.</p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition">
+      <i class="fa-brands fa-rocketchat fa-3x text-[#015556] mb-4"></i>
+      <h3 class="text-xl font-semibold text-gray-800 mb-2">Chatea con compradores</h3>
+      <p class="text-gray-600">Contacta fácilmente con los interesados y cierra tus ventas de manera rápida y segura.</p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition">
+      <i class="fa-solid fa-magnifying-glass fa-3x text-[#015556] mb-4"></i>
+      <h3 class="text-xl font-semibold text-gray-800 mb-2">Encuentra lo que buscas</h3>
+      <p class="text-gray-600">Explora miles de productos de segunda mano: móviles, coches, moda, y mucho más a precios imbatibles.</p>
+    </div>
+
+  </section>
+
+  <section class="bg-[#E9FFB4] text-[#015556] rounded-lg shadow-md p-8 text-center">
+    <h2 class="text-2xl font-bold mb-4">¿Listo para vender?</h2>
+    <p class="mb-6 text-lg">Crea tu cuenta y empieza a ganar dinero con las cosas que ya no usas.</p>
+
+    <% if (!session.userId) { %>
+      <a href="/login" class="inline-block bg-[#015556] text-white font-semibold py-3 px-6 rounded-lg">
+        Crear cuenta
+      </a>
+    <% } else { %>
+      <a href="/products/add" class="inline-block bg-white text-[#015556] font-semibold py-3 px-6 rounded-lg hover:bg-gray-100 transition">
+        Publicar producto
+      </a>
+    <% } %>
+  </section>
+
+  <!-- Chat Section -->
+  <% if (session.userId) { %>
+    <section class="mt-12 p-6 bg-white rounded-lg shadow-md">
+      <h3 class="text-2xl font-semibold text-center mb-4">Chat Global</h3>
+
+      <div id="messages" class="border p-4 max-h-60 overflow-auto flex flex-col gap-2 bg-gray-50 rounded">
+        <% let lastDate = null; %>
+        <% messages.forEach(function(message) { %>
+          <% const messageDate = new Date(message.createdAt); %>
+          <% const messageDay = messageDate.toLocaleDateString(); %>
+
+          <% if (lastDate !== messageDay) { %>
+            <div class="text-center text-xs text-gray-500 py-2">
+              <span><%= messageDay %></span>
+            </div>
+          <% } %>
+
+          <div class="flex <%= message.sender === session.userName ? 'justify-end' : 'justify-start' %>">
+            <div class="<%= message.sender === session.userName ? 'bg-green-200' : 'bg-white' %> rounded-lg px-4 py-2 shadow text-sm max-w-[75%]">
+              <% if (message.sender !== session.userName) { %>
+                <p class="text-[#015556] whitespace-pre-line break-words"><%= message.sender %></p>
+              <% } %>
+              <p class="text-gray-800 whitespace-pre-line break-words"><%= message.message %></p>
+              <div class="text-xs text-gray-500 text-right mt-1">
+                <%= new Date(message.createdAt).toLocaleTimeString() %>
+              </div>
+            </div>
+          </div>
+
+          <% lastDate = messageDay; %>
+        <% }); %>
+      </div>
+
+      <div class="flex gap-2 mt-4">
+        <input type="text" id="messageInput" class="flex-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Escribe un mensaje..." />
+        <button id="sendButton" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Enviar</button>
+      </div>
+    </section>
+  <% } %>
+
+</main>
+
+<%- include('partials/footer.html') %>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io()
+
+  // Si el usuario está logueado, puedes enviar mensajes sin rooms
+  if (<%= session.userId ? 'true' : 'false' %>) {
+    
+    const currentSender = '<%= session.userName %>'
+    
+    socket.emit('joinGlobalChat')
+
+    document.getElementById('sendButton').addEventListener('click', () => {
+      const messageInput = document.getElementById('messageInput')
+      const message = messageInput.value.trim()
+
+      if (message) {
+        socket.emit('sendMessage', { sender: currentSender, message })
+        messageInput.value = ''
+      }
+    })
+
+    socket.on('newMessage', (data) => {
+      const messagesDiv = document.getElementById('messages')
+      const messageWrapper = document.createElement('div')
+      messageWrapper.className = 'flex ' + (data.sender === currentSender ? 'justify-end' : 'justify-start')
+
+      let messageHtml = `
+        <div class="${data.sender === currentSender ? 'bg-green-200' : 'bg-white'} rounded-lg px-4 py-2 shadow text-sm max-w-[75%]">
+          ${data.sender !== currentSender ? `<p class="text-gray-800 whitespace-pre-line break-words">${data.sender}</p>` : ''}
+          <p class="text-gray-800 whitespace-pre-line break-words">${data.message}</p>
+          <div class="text-xs text-gray-500 text-right mt-1">${new Date(data.createdAt).toLocaleTimeString()}</div>
+        </div>
+      `;
+      messageWrapper.innerHTML = messageHtml;
+      messagesDiv.appendChild(messageWrapper)
+      messagesDiv.scrollTop = messagesDiv.scrollHeight
+    })
+  }
+</script>

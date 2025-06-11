@@ -1,0 +1,41 @@
+<%- include('partials/header.html') %>
+
+<main class="flex items-center justify-center flex-1 bg-gray-100 px-4 py-12">
+
+  <section class="bg-white w-full max-w-lg rounded-lg shadow-lg p-8 text-center">
+
+    <div class="mb-6">
+      <i class="fas fa-exclamation-triangle fa-5x text-[#015556]"></i>
+    </div>
+
+    <h2 class="text-3xl font-bold text-[#015556] mb-4">¡Vaya! Ha ocurrido un error</h2>
+
+    <p class="text-gray-700 mb-2 text-lg"><%= message %></p>
+
+    <% if (error && error.status) { %>
+      <p class="text-gray-500 mb-6 text-sm">Código de error: <%= error.status %></p>
+    <% } %>
+
+    <div class="flex flex-col md:flex-row justify-center gap-4">
+      
+      <a href="/" class="inline-flex items-center justify-center gap-2 bg-[#015556] hover:bg-[#014046] text-white font-semibold py-3 px-6 rounded-lg transition">
+        <i class="fas fa-home"></i> Página principal
+      </a>
+
+      <% if (session.userId) { %>
+        <a href="/products" class="inline-flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-[#015556] font-semibold py-3 px-6 rounded-lg transition">
+          <i class="fas fa-box"></i> Ver mis productos
+        </a>
+      <% } else { %>
+        <a href="/login" class="inline-flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-[#015556] font-semibold py-3 px-6 rounded-lg transition">
+          <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+        </a>
+      <% } %>
+
+    </div>
+
+  </section>
+
+</main>
+
+<%- include('partials/footer.html') %>

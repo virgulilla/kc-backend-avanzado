@@ -13,7 +13,7 @@ import { addFlashMessages } from "./lib/flashmessages.js";
 import i18n from "./lib/i18nConfigure.js";
 import * as apiProductsController from "./controllers/api/apiProductsController.js";
 import upload from "./lib/uploadConfigure.js";
-import * as localeController from './controllers/localeController.js'
+import * as localeController from "./controllers/localeController.js";
 
 const app = express();
 
@@ -39,12 +39,16 @@ app.use("/lib/nouislider", express.static("node_modules/nouislider/dist"));
 app.use(sessionManager.sessionMiddleware);
 app.use(sessionManager.useSessionInViews);
 
-app.get('/api/products', apiProductsController.list)
-app.get('/api/products/:productId', apiProductsController.getOne);
-app.post('/api/products',  upload.single("image"), apiProductsController.newProduct)
+app.get("/api/products", apiProductsController.list);
+app.get("/api/products/:productId", apiProductsController.getOne);
+app.post(
+  "/api/products",
+  upload.single("image"),
+  apiProductsController.newProduct
+);
 
 app.use(i18n.init);
-app.get('/change-locale/:locale', localeController.changeLocale)
+app.get("/change-locale/:locale", localeController.changeLocale);
 
 app.use(flash());
 app.use(addFlashMessages);
@@ -63,6 +67,13 @@ app.use(function (err, req, res, next) {
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
   res.status(err.status || 500);
+
+  // For API errors response must be JSON
+  if (req.url.startsWith("/api/")) {
+    res.json({ error: err.message });
+    return;
+  }
+
   res.render("error", {
     message: err.message || "Algo salió mal",
     error: req.app.get("env") === "development" ? err : {},

@@ -39,5 +39,9 @@
 	"Delete product": "Delete product",
 	"Oops! An error has occurred.": "Oops! An error has occurred.",
 	"Home page": "Home page",
-	"View my products": "View my products"
+	"View my products": "View my products",
+	"Create product": "Create product",
+	"Product name": "Product name",
+	"Image": "Image",
+	"Cancel": "Cancel"
 }

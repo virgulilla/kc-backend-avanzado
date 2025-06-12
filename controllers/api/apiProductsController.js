@@ -1,5 +1,14 @@
 import ProductModel from "../../models/ProductModel.js";
 
+/**
+ * @openapi
+ * /api/products:
+ *   get:
+ *     description: Return a list of products
+ *     responses:
+ *       200:
+ *         description: Returns a mysterious string.
+ */
 export async function list(req, res, next) {
   try {
     const filter = {};
@@ -67,7 +76,7 @@ export async function getOne(req, res, next) {
 
 export async function newProduct(req, res, next) {
   try {
-    const { name, price, tags } = req.body;    
+    const { name, price, tags } = req.body;
     const product = await ProductModel.newProduct({
       name,
       price,

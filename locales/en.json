@@ -1,10 +1,6 @@
 {
 	"Publish in seconds": "Publish in seconds",
 	"Hello, {{userName}}": "Hello, {{userName}}",
-	"Mouse": {
-		"one": "Mouse",
-		"other": "Mice"
-	},
 	"Search products...": "Search products...",
 	"My products": "My products",
 	"Sell now": "Sell now",
@@ -43,5 +39,8 @@
 	"Create product": "Create product",
 	"Product name": "Product name",
 	"Image": "Image",
-	"Cancel": "Cancel"
+	"Cancel": "Cancel",
+	"Are you sure you want to delete it?": "Are you sure you want to delete it?",
+	"Create account": "Create account",
+	"Log in": "Log in"
 }

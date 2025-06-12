@@ -117,7 +117,7 @@
                 <form
                   action="/products/<%= product._id %>/delete"
                   method="POST"
-                  onsubmit="return confirm('¿Estás seguro de eliminar este producto?');"
+                  onsubmit="return confirm('<%= __(`Are you sure you want to delete it?`) %>');"
                 >
                   <button
                     type="submit"

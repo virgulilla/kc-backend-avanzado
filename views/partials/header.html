@@ -70,6 +70,12 @@
             </a>
             <% } else { %> <%= __('Hello, {{userName}}', session) %>
             <a
+              target="_blank"
+              href="/api-doc"
+              class="text-gray-600 hover:text-red-600 transition"
+              >API Doc</a
+            >
+            <a
               href="/logout"
               class="text-gray-600 hover:text-red-600 transition"
               >Logout</a
@@ -83,8 +89,15 @@
             <% } %> <%# Lang selector %>
             <div class="flex items-center gap-2 ml-4">
               <% getLocales().forEach( locale => { %>
-              <a href="/change-locale/<%= locale %>" class="block w-6 h-6 ring-1 ring-gray-300 rounded overflow-hidden hover:opacity-75 transition">
-                <img src="/images/<%= locale %>.png" alt="<%= locale %>"  class="w-full h-full object-cover"/>
+              <a
+                href="/change-locale/<%= locale %>"
+                class="block w-6 h-6 ring-1 ring-gray-300 rounded overflow-hidden hover:opacity-75 transition"
+              >
+                <img
+                  src="/images/<%= locale %>.png"
+                  alt="<%= locale %>"
+                  class="w-full h-full object-cover"
+                />
               </a>
               <% }) %>
             </div>

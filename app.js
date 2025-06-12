@@ -14,6 +14,7 @@ import i18n from "./lib/i18nConfigure.js";
 import * as apiProductsController from "./controllers/api/apiProductsController.js";
 import upload from "./lib/uploadConfigure.js";
 import * as localeController from "./controllers/localeController.js";
+import swaggerMiddleware from "./lib/swaggerMiddleware.js";
 
 const app = express();
 
@@ -39,6 +40,9 @@ app.use("/lib/nouislider", express.static("node_modules/nouislider/dist"));
 app.use(sessionManager.sessionMiddleware);
 app.use(sessionManager.useSessionInViews);
 
+/**
+ * API routes
+ */
 app.get("/api/products", apiProductsController.list);
 app.get("/api/products/:productId", apiProductsController.getOne);
 app.post(
@@ -52,9 +56,13 @@ app.get("/change-locale/:locale", localeController.changeLocale);
 
 app.use(flash());
 app.use(addFlashMessages);
+/**
+ * WEb routes
+ */
 app.use("/", authRouter);
 app.use("/", indexRouter);
 app.use("/products", productsRouter);
+app.use('/api-doc', swaggerMiddleware);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

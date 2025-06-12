@@ -1,10 +1,6 @@
 {
 	"Publish in seconds": "Publica en segundos",
 	"Hello, {{userName}}": "Hola, {{userName}}",
-	"Mouse": {
-		"one": "Ratón",
-		"other": "Ratones"
-	},
 	"Search products...": "Buscar productos...",
 	"My products": "Mis productos",
 	"Sell now": "Vender ahora",
@@ -44,5 +40,6 @@
 	"Create product": "Crear producto",
 	"Product name": "Nombre de producto",
 	"Image": "Imagen",
-	"Cancel": "Cancelar"
+	"Cancel": "Cancelar",
+	"Are you sure you want to delete it?": "¿Estás seguro de que quieres eliminarlo?"
 }

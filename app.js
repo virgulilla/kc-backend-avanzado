@@ -11,10 +11,12 @@ import { productsRouter } from "./routes/products.js";
 import { fileURLToPath } from "url";
 import { addFlashMessages } from "./lib/flashmessages.js";
 import i18n from "./lib/i18nConfigure.js";
+import * as apiLoginController from "./controllers/api/apiLoginController.js";
 import * as apiProductsController from "./controllers/api/apiProductsController.js";
 import upload from "./lib/uploadConfigure.js";
 import * as localeController from "./controllers/localeController.js";
 import swaggerMiddleware from "./lib/swaggerMiddleware.js";
+import * as jwtAuth from "./lib/jwtAuthMiddleware.js";
 
 const app = express();
 
@@ -43,10 +45,12 @@ app.use(sessionManager.useSessionInViews);
 /**
  * API routes
  */
-app.get("/api/products", apiProductsController.list);
-app.get("/api/products/:productId", apiProductsController.getOne);
+app.post('/api/login', apiLoginController.loginJWT);
+app.get("/api/products", jwtAuth.guard, apiProductsController.list);
+app.get("/api/products/:productId", jwtAuth.guard, apiProductsController.getOne);
 app.post(
   "/api/products",
+  jwtAuth.guard,
   upload.single("image"),
   apiProductsController.newProduct
 );

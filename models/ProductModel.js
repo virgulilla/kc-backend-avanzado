@@ -55,7 +55,8 @@ class ProductModel {
     };
   }
 
-  static async getAll(filter, skip, limit, sort) {
+  static async getAll(userId, filter, skip, limit, sort) {
+    filter.owner = userId;
     const products = await Product.find(filter)
       .skip(skip)
       .limit(parseInt(limit))

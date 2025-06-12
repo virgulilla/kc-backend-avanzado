@@ -11,6 +11,7 @@ import ProductModel from "../../models/ProductModel.js";
  */
 export async function list(req, res, next) {
   try {
+    const userId = req.apiUserId;
     const filter = {};
 
     if (req.query.tag) {
@@ -39,6 +40,7 @@ export async function list(req, res, next) {
     const withCount = req.query.count === "true";
 
     const products = await ProductModel.getAll(
+      userId,
       filter,
       skip,
       req.query.limit,
@@ -60,9 +62,10 @@ export async function list(req, res, next) {
 
 export async function getOne(req, res, next) {
   try {
+    const userId = req.apiUserId;
     const productId = req.params.productId;
 
-    const product = await ProductModel.getOneProduct(productId);
+    const product = await ProductModel.getOne(productId, userId);
 
     if (!product) {
       return res.status(404).json({ error: "Producto no encontrado" });

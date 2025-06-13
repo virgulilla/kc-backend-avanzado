@@ -54,6 +54,8 @@ app.post(
   upload.single("image"),
   apiProductsController.newProduct
 );
+app.put('/api/products/:productId', jwtAuth.guard, upload.single("image"), apiProductsController.updateProduct);
+app.delete('/api/products/:productId', jwtAuth.guard, apiProductsController.deleteProduct);
 
 app.use(i18n.init);
 app.get("/change-locale/:locale", localeController.changeLocale);

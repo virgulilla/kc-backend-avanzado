@@ -79,7 +79,7 @@ class ProductModel {
   }
 
   static async getOneProduct(productId) {
-    return await Product.findById(productId)
+    return await Product.findById(productId);
   }
 
   static async createProduct({ name, price, tags, image, owner }) {
@@ -101,26 +101,6 @@ class ProductModel {
     return await product.save();
   }
 
-  static async newProduct({ name, price, tags, image }) {
-    const allowedTags = ["work", "lifestyle", "motor", "mobile"];
-
-    const normalizedTags = Array.isArray(tags) ? tags : [tags];
-    const filteredTags = normalizedTags.filter((tag) =>
-      allowedTags.includes(tag)
-    );
-
-    const product = new Product({
-      name,
-      price,
-      tags: filteredTags,
-      image,
-    });
-
-    return await product.save();
-
-
-  }
-
   static async deleteProductById({ productId, userId }) {
     const product = await Product.findOne({
       _id: productId,
@@ -134,6 +114,19 @@ class ProductModel {
     await product.deleteOne();
 
     return product;
+  }
+
+  static async save(product, _id, owner) {
+    const result = await Product.findOneAndUpdate(
+      {
+        _id: _id,
+        owner: owner,
+      },
+      product,
+      { new: true }
+    );
+
+    return result;
   }
 }
 

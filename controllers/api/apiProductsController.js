@@ -79,15 +79,52 @@ export async function getOne(req, res, next) {
 
 export async function newProduct(req, res, next) {
   try {
+    const userId = req.apiUserId;
     const { name, price, tags } = req.body;
-    const product = await ProductModel.newProduct({
+    const product = await ProductModel.createProduct({
       name,
       price,
       tags,
       image: req.file?.filename,
+      owner: userId,
     });
 
     res.status(201).json({ result: product });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function updateProduct(req, res, next) {
+  try {
+    const userId = req.apiUserId;
+    const productId = req.params.productId;
+
+    const productData = req.body;
+    productData.image = req.file?.filename
+    const updatedProduct = await ProductModel.save(productData, productId, userId);
+
+    res.json({ result: updatedProduct });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function deleteProduct(req, res, next) {
+  try {
+    const userId = req.apiUserId;
+    const productId = req.params.productId;
+    const product = await ProductModel.getOne(productId, userId);
+    if (!product) {
+      return res.status(404).json({ error: "Producto no encontrado" });
+    }
+    await ProductModel.deleteProductById({
+      productId,
+      userId,
+    });
+
+    res.status(204).json()
+
   } catch (err) {
     next(err);
   }

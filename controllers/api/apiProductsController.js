@@ -1,4 +1,5 @@
 import ProductModel from "../../models/ProductModel.js";
+import { publishThumbnailJob } from "../../services/rabbitPublisher.js";
 
 /**
  * @openapi
@@ -89,6 +90,10 @@ export async function newProduct(req, res, next) {
       owner: userId,
     });
 
+    if (req.file?.path) {
+      await publishThumbnailJob(req.file.path);
+    }
+
     res.status(201).json({ result: product });
   } catch (err) {
     next(err);
@@ -101,8 +106,16 @@ export async function updateProduct(req, res, next) {
     const productId = req.params.productId;
 
     const productData = req.body;
-    productData.image = req.file?.filename
-    const updatedProduct = await ProductModel.save(productData, productId, userId);
+    productData.image = req.file?.filename;
+    const updatedProduct = await ProductModel.save(
+      productData,
+      productId,
+      userId
+    );
+
+    if (req.file?.path) {
+      await publishThumbnailJob(req.file.path);
+    }
 
     res.json({ result: updatedProduct });
   } catch (err) {
@@ -123,8 +136,7 @@ export async function deleteProduct(req, res, next) {
       userId,
     });
 
-    res.status(204).json()
-
+    res.status(204).json();
   } catch (err) {
     next(err);
   }

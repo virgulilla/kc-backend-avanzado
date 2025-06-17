@@ -1,4 +1,5 @@
 import ProductModel from "../models/ProductModel.js";
+import { publishThumbnailJob } from "../services/rabbitPublisher.js";
 
 export class ProductController {
   static async getAll(req, res) {
@@ -53,6 +54,10 @@ export class ProductController {
         image: req.file.filename,
         owner: req.session.userId,
       });
+
+      if (req.file?.path) {
+        await publishThumbnailJob(req.file.path);
+      }
 
       req.flash("success", "Producto creado correctamente");
       res.redirect("/products");

@@ -40,7 +40,7 @@
         <form
           action="/products/<%= product._id %>/delete"
           method="POST"
-          onsubmit="return confirm('<%= __(`test`) %>');"
+          onsubmit="return confirm('<%= __(`Are you sure you want to delete it?`) %>');"
           class="flex-1"
         >
           <button

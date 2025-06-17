@@ -1,7 +1,6 @@
 import amqplib from "amqplib";
 import { Jimp } from "jimp";
 import dotenv from "dotenv";
-import path from "path";
 
 dotenv.config();
 

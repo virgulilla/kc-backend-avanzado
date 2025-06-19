@@ -92,9 +92,12 @@
 
         <% products.forEach(product => { %>
           <article class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col transition hover:shadow-lg">
-            
+           <%
+              const extIndex = product.image.lastIndexOf('.');
+              const thumbnailImage = product.image.slice(0, extIndex) + '_thumbnail' + product.image.slice(extIndex);
+            %> 
             <img
-              src="<%= product.image %>"
+              src="<%= thumbnailImage  %>"
               onerror="this.onerror=null;this.src='https://img.freepik.com/free-vector/images-concept-illustration_114360-218.jpg?t=st=1742221622~exp=1742225222~hmac=417eebf58d19fc9c829cfbacff7edde291755546892eadcaf4430c4c3fe50ce3&w=740';"
               alt="<%= product.name %>"
               class="w-full h-48 object-cover"

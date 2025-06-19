@@ -1,6 +1,7 @@
 import amqplib from "amqplib";
 import { Jimp } from "jimp";
 import dotenv from "dotenv";
+import path from "path";
 
 dotenv.config();
 
@@ -26,8 +27,12 @@ const QUEUE_NAME = "thumbnail_queue";
 
         const image = await Jimp.read(imagePath);
         image.resize({ w: 100, h: 100 });
-        await image.write(imagePath);
-        console.log("Thumbnail generado:", imagePath);
+        const dir = path.dirname(imagePath);
+        const ext = path.extname(imagePath);
+        const base = path.basename(imagePath, ext);
+        const thumbnailPath = path.join(dir, `${base}_thumbnail${ext}`);
+        await image.write(thumbnailPath);
+        console.log("Thumbnail generado:", thumbnailPath);
 
         channel.ack(msg);
       } catch (err) {

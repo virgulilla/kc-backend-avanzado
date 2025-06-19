@@ -101,7 +101,10 @@ Tanto si se usa en cloud, docker o descargado en tu sistema operativo:
 - Desde el listado de instancias, ir al panel de la instancia creada
 - En la pestaña Exchanges buscar y clicar thumbnail_jobs (aparecerá cuando desde la API o desde la web se suba una imagen)
 - Conectar el exchange con la cola thumbnail_queue y * en Routing key
-- Para iniciar el worker que lea las colas de rabbitMQ, ejecutar en terminal: npm run initThumbWorker
+- Para iniciar el worker que lea las colas de rabbitMQ, ejecutar en terminal: 
+```bash
+npm run initThumbWorker
+```
 
 ## Enlace a módulo publicado en NPM
 

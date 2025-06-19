@@ -26,6 +26,9 @@ Nodepop es un servicio donde los usuarios pueden:
 - Express-session
 - bcrypt
 - ESLint
+- JWT
+- RabbitMQ
+- Websockets
 
 ---
 
@@ -58,13 +61,7 @@ npm install
 
 - Renombra .env.example a .env
 
-Pon tus datos de configuración para arrancar el entorno.
-
-```bash
-MONGODB_URI="mongo uri connection_string"
-PORT="port_nubmer"
-SESSION_SECRET="secret_string"
-```
+Pon tus datos de configuración en archivo .env para arrancar el entorno.
 
 ## Inicialización de la base de datos
 
@@ -91,3 +88,26 @@ npm run dev
 ## Usuarios de prueba
 - user1@example.com Contraseña: 1234
 - user2@example.com Contraseña: 1234
+
+## Documentación de la API
+
+- Con Swagger: http://localhost:3000/api-doc/
+- Con Redoc: http://localhost:3000/redoc-static.html
+
+## Configuración rabbitMQ
+### Servicio usado para crear thumbnails sobre las imagenes que se suben con la API y via web
+Tanto si se usa en cloud, docker o descargado en tu sistema operativo: 
+- Crear una instancia
+- Desde el listado de instancias, ir al panel de la instancia creada
+- En la pestaña Exchanges buscar y clicar thumbnail_jobs (aparecerá cuando desde la API o desde la web se suba una imagen)
+- Conectar el exchange con la cola thumbnail_queue y * en Routing key
+- Para iniciar el worker que lea las colas de rabbitMQ, ejecutar en terminal: npm run initThumbWorker
+
+## Enlace a módulo publicado en NPM
+
+https://www.npmjs.com/package/whatsapp-me?activeTab=readme
+
+### Descripción
+
+Pequeño componente de React que para cargar un botón de whatsapp , que permite varios parametros de configuración
+- Live demo: https://www.scoobydog.es/
